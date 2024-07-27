@@ -274,7 +274,7 @@ export default function App() {
                       <option value="medium">Medium</option>
                       <option value="high">High</option>
                     </Select>
-                    <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={handleAddTodo}>
+                    <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={handleAddTodo} loadingText="Adding" isLoading={loading}>
                       Add
                     </Button>
                   </HStack>
@@ -338,7 +338,7 @@ export default function App() {
                                     <Button colorScheme="green" size="sm" onClick={() => handleSaveTodo(todo.id)} loadingText="Saving" isLoading={loading} mr={2}>
                                       Save
                                     </Button>
-                                    <Button colorScheme="red" size="sm" onClick={() => setEditingTodoId(null)} isActive={loading}>
+                                    <Button colorScheme="red" size="sm" onClick={() => setEditingTodoId(null)} isActive={!loading}>
                                       Cancel
                                     </Button>
                                   </>
@@ -371,6 +371,7 @@ export default function App() {
                                       colorScheme="red"
                                       variant="ghost"
                                       aria-label="Delete todo"
+                                      isLoading={loading}
                                     />
                                   </>
                                 )}

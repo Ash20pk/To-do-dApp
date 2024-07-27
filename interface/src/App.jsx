@@ -30,16 +30,16 @@ import {
   Progress,
   useToast,
 } from "@chakra-ui/react";
-import { 
-  DeleteIcon, 
-  EditIcon, 
-  MoonIcon, 
-  SunIcon, 
-  CheckIcon, 
-  TimeIcon, 
-  WarningIcon, 
+import {
+  DeleteIcon,
+  EditIcon,
+  MoonIcon,
+  SunIcon,
+  CheckIcon,
+  TimeIcon,
+  WarningIcon,
   QuestionIcon,
-  AddIcon
+  AddIcon,
 } from "@chakra-ui/icons";
 import { useAccount, useActiveChainIds, useConnect, useDisconnect } from "graz";
 import { useTodoContract } from './hooks/useTodoContract';
@@ -71,7 +71,7 @@ export default function App() {
       default: return <QuestionIcon color="gray.500" />;
     }
   };
-  
+
   const getStatusIcon = (status) => {
     switch (status.toLowerCase()) {
       case 'completed': return <CheckIcon color="green.500" />;
@@ -145,10 +145,12 @@ export default function App() {
     }));
   }, []);
 
+  console.log('Local Editing todo:', localEditTodo);
+
   const handleSaveTodo = useCallback(() => {
     updateTodo(localEditTodo.id, localEditTodo.description, localEditTodo.status, localEditTodo.priority)
       .then(() => {
-        setTodos(prev => prev.map(todo => 
+        setTodos(prev => prev.map(todo =>
           todo.id === localEditTodo.id ? { ...localEditTodo } : todo
         ));
         setIsOpen(false);
@@ -158,6 +160,7 @@ export default function App() {
           duration: 2000,
           isClosable: true,
         });
+        console.log('Saved todo:', localEditTodo); // Debug log
       })
       .catch(error => {
         console.error("Failed to update todo:", error);
@@ -344,12 +347,12 @@ export default function App() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color={textColor}>Edit Todo</ModalHeader>
-          <ModalCloseButton color={textColor}/>
+          <ModalCloseButton color={textColor} />
           <ModalBody>
             <FormControl>
               <FormLabel color={textColor}>Description</FormLabel>
-              <Input 
-                value={localEditTodo.description || ''}
+              <Input
+                value={localEditTodo?.description}
                 onChange={(e) => handleEditInputChange(e, 'description')}
                 color={textColor}
               />
@@ -357,7 +360,7 @@ export default function App() {
             <FormControl mt={4}>
               <FormLabel color={textColor}>Priority</FormLabel>
               <Select
-                value={localEditTodo.priority || 'none'}
+                value={localEditTodo?.priority}
                 onChange={(e) => handleEditInputChange(e, 'priority')}
                 color={textColor}
               >
@@ -370,7 +373,7 @@ export default function App() {
             <FormControl mt={4}>
               <FormLabel color={textColor}>Status</FormLabel>
               <Select
-                value={localEditTodo.status || 'to_do'}
+                value={localEditTodo?.status}
                 onChange={(e) => handleEditInputChange(e, 'status')}
                 color={textColor}
               >

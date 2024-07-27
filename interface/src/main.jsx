@@ -5,7 +5,7 @@ import './index.css'
 import { GrazProvider } from "graz";
 import { mantraChainConfig } from "./chain.js";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
-import theme from './theme'; 
+import theme from './theme.js'; 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

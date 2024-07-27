@@ -29,6 +29,7 @@ export function useTodoContract() {
   const addTodo = useCallback(async (description, priority, owner = account.bech32Address.toString()) => {
     if (!account) return;
     setLoading(true);
+    console.log(description, priority);
     const signingClient = await getSigningClient();
     await signingClient.execute(
       account.bech32Address,

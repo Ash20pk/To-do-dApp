@@ -124,6 +124,7 @@ export default function App() {
 
   const handleAddTodo = useCallback(() => {
     if (newTodo.trim()) {
+      console.log(newTodo, todoNewPriority);
       addTodo(newTodo, todoNewPriority)
         .then((newId) => {
           setTodos(prev => [...prev, { id: newId, description: newTodo, priority: todoNewPriority, status: "to_do" }]);

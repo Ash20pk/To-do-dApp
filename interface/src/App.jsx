@@ -282,7 +282,7 @@ export default function App() {
 
                 {/* Todo List */}
                 <Box>
-                  <Heading color={textColor} size="md" mb={4}>Your Todos</Heading>
+                  <Heading color={textColor} size="md" mb={4}>Your To-Dos</Heading>
                   {['to_do', 'in_progress', 'done', 'cancelled'].map(statusGroup => {
                     const groupedTodos = groupTodosByStatus();
                     const todosInGroup = groupedTodos[statusGroup] || [];

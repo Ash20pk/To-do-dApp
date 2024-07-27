@@ -89,8 +89,11 @@ export default function App() {
 
   const calculateProgress = useCallback(() => {
     const totalTodos = todos.length;
-    const completedTodos = todos.filter(todo => todo.status.toLowerCase() === "completed").length;
-    return totalTodos > 0 ? (completedTodos / totalTodos) * 100 : 0;
+    const completedTodos = todos.filter(todo => {
+      const status = String(todo.status).toLowerCase();
+      return status === "completed" || status === "done";
+    }).length;
+    return totalTodos > 0 ? Math.round((completedTodos / totalTodos) * 100) : 0;
   }, [todos]);
 
   const groupTodosByStatus = useCallback(() => {
@@ -109,7 +112,7 @@ export default function App() {
       fetchTodos().then(setTodos).catch(error => {
         console.error("Failed to fetch todos:", error);
         toast({
-          title: "Error fetching todos",
+          title: "Error fetching to dos",
           description: "Please try again later.",
           status: "error",
           duration: 3000,
@@ -137,7 +140,7 @@ export default function App() {
           console.error("Failed to add todo:", error);
           setLoading(false);
           toast({
-            title: "Error adding todo",
+            title: "Error adding to do",
             description: "Please try again.",
             status: "error",
             duration: 3000,
@@ -172,7 +175,7 @@ export default function App() {
         console.error("Failed to update todo:", error);
         setLoading(false);
         toast({
-          title: "Error updating todo",
+          title: "Error updating to do",
           description: "Please try again.",
           status: "error",
           duration: 3000,
@@ -196,7 +199,7 @@ export default function App() {
         console.error("Failed to delete todo:", error);
         setLoading(false);
         toast({
-          title: "Error deleting todo",
+          title: "Error deleting to do",
           description: "Please try again.",
           status: "error",
           duration: 3000,
@@ -387,7 +390,7 @@ export default function App() {
             ) : (
               <VStack spacing={4} align="center" justify="center" height="100%">
                 <Heading size="xl">Welcome to To Do App</Heading>
-                <Text color={textColor}>Connect your wallet to start managing your todos</Text>
+                <Text color={textColor}>Connect your wallet to start managing your to-dos</Text>
                 <Button
                   size="lg"
                   colorScheme="blue"

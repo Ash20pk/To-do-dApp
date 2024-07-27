@@ -271,7 +271,7 @@ export default function App() {
 
                 {/* Todo List */}
                 <Box>
-                  <Heading color={textColor} size="md" mb={4}>Your Todos</Heading>
+                  <Heading color={textColor} size="md" mb={4}>You have so much to do...</Heading>
                   <List spacing={3}>
                     {todos.map((todo) => (
                       <ListItem
@@ -344,7 +344,7 @@ export default function App() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color={textColor}>Edit Todo</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={textColor}/>
           <ModalBody>
             <FormControl>
               <FormLabel color={textColor}>Description</FormLabel>

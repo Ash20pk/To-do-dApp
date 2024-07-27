@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useAccount, useCosmWasmClient } from "graz";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { CONTRACT_ADDRESS } from '../chain';
@@ -8,11 +8,13 @@ import { GasPrice } from "@cosmjs/stargate";
 export function useTodoContract() {
   const { data: account } = useAccount();
   const { data: cosmWasmClient } = useCosmWasmClient();
+  const [loading, setLoading] = useState(false);
 
   const fetchTodos = useCallback(async () => {
     if (!cosmWasmClient) return [];
+    setLoading(true);
     const result = await cosmWasmClient.queryContractSmart(CONTRACT_ADDRESS, { query_list: {} });
-    console.log(result.entries);
+    setLoading(false);
     return result.entries;
   }, [cosmWasmClient]);
 
@@ -26,6 +28,7 @@ export function useTodoContract() {
 
   const addTodo = useCallback(async (description, priority, owner = account.bech32Address.toString()) => {
     if (!account) return;
+    setLoading(true);
     const signingClient = await getSigningClient();
     await signingClient.execute(
       account.bech32Address,
@@ -33,10 +36,12 @@ export function useTodoContract() {
       { new_entry: { description, priority, owner } },
       "auto"
     );
+    setLoading(false);
   }, [account, getSigningClient]);
 
   const updateTodo = useCallback(async (id, description, status, priority, owner = account.bech32Address.toString()) => {
     if (!account) return;
+    setLoading(true);
     const signingClient = await getSigningClient();
     await signingClient.execute(
       account.bech32Address,
@@ -44,10 +49,12 @@ export function useTodoContract() {
       { update_entry: { id, description, status, priority, owner } },
       "auto"
     );
+    setLoading(false);
   }, [account, getSigningClient]);
 
   const deleteTodo = useCallback(async (id, owner = account.bech32Address.toString()) => {
     if (!account) return;
+    setLoading(true);
     const signingClient = await getSigningClient();
     await signingClient.execute(
       account.bech32Address,
@@ -55,7 +62,8 @@ export function useTodoContract() {
       { delete_entry: { id, owner } },
       "auto"
     );
+    setLoading(false);
   }, [account, getSigningClient]);
 
-  return { fetchTodos, addTodo, updateTodo, deleteTodo };
+  return { fetchTodos, addTodo, updateTodo, deleteTodo, loading, setLoading };
 }

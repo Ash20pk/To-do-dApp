@@ -390,7 +390,7 @@ export default function App() {
               </VStack>
             ) : (
               <VStack spacing={4} align="center" justify="center" height="100%">
-                <Heading size="xl">Welcome to To Do App</Heading>
+                <Heading color={textColor} size="xl">Welcome to To Do App</Heading>
                 <Text color={textColor}>Connect your wallet to start managing your to-dos</Text>
                 <Button
                   size="lg"

@@ -13,7 +13,8 @@ export function useTodoContract() {
   const fetchTodos = useCallback(async () => {
     if (!cosmWasmClient) return [];
     setLoading(true);
-    const result = await cosmWasmClient.queryContractSmart(CONTRACT_ADDRESS, { query_list: {} });
+    const accountAddress = account.bech32Address.toString()
+    const result = await cosmWasmClient.queryContractSmart(CONTRACT_ADDRESS, { query_user_list: {user: accountAddress} });
     setLoading(false);
     return result.entries;
   }, [cosmWasmClient]);

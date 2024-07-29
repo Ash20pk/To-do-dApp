@@ -124,6 +124,9 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         QueryMsg::QueryEntry { id } => to_binary(&query_entry(deps, id)?),
         QueryMsg::QueryList { start_after, limit } => {
             to_binary(&query_list(deps, start_after, limit)?)
+        },
+        QueryMsg::QueryUserList { user, start_after, limit } => {
+            to_binary(&query_user_list(deps, user, start_after, limit)?)
         }
     }
 }
@@ -153,6 +156,28 @@ fn query_list(deps: Deps, start_after: Option<u64>, limit: Option<u32>) -> StdRe
 
     let result = ListResponse {
         entries: entries?.into_iter().map(|l| l.1).collect(),
+    };
+    Ok(result)
+}
+
+pub fn query_user_list(deps: Deps, user: String, start_after: Option<u64>, limit: Option<u32>) -> StdResult<ListResponse> {
+    let limit = limit.unwrap_or(DEFAULT_LIMIT).min(MAX_LIMIT) as usize;
+    let start = start_after.map(Bound::exclusive);
+    
+    let entries: StdResult<Vec<_>> = LIST
+        .range(deps.storage, start, None, Order::Ascending)
+        .filter(|item| {
+            if let Ok((_, entry)) = item {
+                entry.owner == user
+            } else {
+                false
+            }
+        })
+        .take(limit)
+        .collect();
+
+    let result = ListResponse {
+        entries: entries?.into_iter().map(|(_, entry)| entry).collect(),
     };
     Ok(result)
 }

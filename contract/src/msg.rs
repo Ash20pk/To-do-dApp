@@ -36,6 +36,12 @@ pub enum QueryMsg {
         start_after: Option<u64>,
         limit: Option<u32>,
     },
+    #[returns(ListResponse)]
+    QueryUserList { 
+        user: String, 
+        start_after: Option<u64>, 
+        limit: Option<u32> 
+    },
 }
 
 // We define a custom struct for each query response

@@ -46,7 +46,7 @@ import { useTodoContract } from './hooks/useTodoContract';
 import { checkKeplrInstalled, getKeplrInstallUrl } from './utils/keplrUtils';
 
 export default function App() {
-  const { data: account, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount();
+  const { data: account, isConnected, isConnecting, isReconnecting } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { fetchTodos, addTodo, updateTodo, deleteTodo, loading, setLoading } = useTodoContract();

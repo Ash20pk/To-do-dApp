@@ -43,6 +43,7 @@ import {
 } from "@chakra-ui/icons";
 import { useAccount, useConnect, useDisconnect } from "graz";
 import { useTodoContract } from './hooks/useTodoContract';
+import { checkKeplrInstalled, getKeplrInstallUrl } from './utils/keplrUtils';
 
 export default function App() {
   const { data: account, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount();
@@ -106,6 +107,22 @@ export default function App() {
       return acc;
     }, {});
   }, [todos, toast]);
+
+  const connectWallet = async() => {
+    if (!checkKeplrInstalled()) {
+      const installUrl = getKeplrInstallUrl();
+      if (window.confirm("Keplr wallet is not installed. Would you like to install it now?")) {
+        window.open(installUrl, '_blank');
+      }
+    } else {
+      try {
+        connect({ chainId: "mantra-hongbai-1" })
+      } catch (error) {
+        console.error("Failed to connect:", error);
+        alert("Failed to connect. Please make sure Keplr is set up correctly.");
+      }
+    }
+  };
 
   useEffect(() => {
     if (isConnected) {
@@ -227,7 +244,7 @@ export default function App() {
               <Button
                 size="sm"
                 colorScheme={isConnected ? "red" : "blue"}
-                onClick={() => isConnected ? disconnect() : connect({ chainId: "mantra-hongbai-1" })}
+                onClick={() => isConnected ? disconnect() : connectWallet()}
                 isLoading={isConnecting || isReconnecting}
                 loadingText="Connecting"
               >
@@ -395,7 +412,7 @@ export default function App() {
                 <Button
                   size="lg"
                   colorScheme="blue"
-                  onClick={() => connect({ chainId: "mantra-hongbai-1" })}
+                  onClick={connectWallet}
                 >
                   Connect Wallet
                 </Button>

@@ -54,10 +54,9 @@ export default function App() {
   const toast = useToast();
 
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
+  const [newTodo, setNewTodo] = useState({ newTodo:"", priority:"none"});
   const [status, setStatus] = useState("To Do")
   const [description, setDescription] = useState("");
-  const [todoNewPriority, setNewTodoPriority] = useState("none");
   const [todoPriority, setTodoPriority] = useState("none");
   const [isOpen, setIsOpen] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
@@ -140,13 +139,11 @@ export default function App() {
   }, [isConnected, fetchTodos, toast]);
 
   const handleAddTodo = useCallback(() => {
-    if (newTodo.trim()) {
-      console.log(newTodo, todoNewPriority);
-      addTodo(newTodo, todoNewPriority)
+    if (newTodo.newTodo.trim()) {
+      addTodo(newTodo.newTodo, newTodo.priority)
         .then((newId) => {
-          setTodos(prev => [...prev, { id: newId, description: newTodo, priority: todoNewPriority, status: "to_do" }]);
-          setNewTodo("");
-          setNewTodoPriority("none");
+          setTodos(prev => [...prev, { id: newId, description: newTodo.newTodo, priority: newTodo.priority, status: "to_do" }]);
+          setNewTodo({ newTodo:"", priority:"none"});
           toast({
             title: "To do added",
             status: "success",
@@ -278,15 +275,15 @@ export default function App() {
                   <Heading color={textColor} size="md" mb={4}>Add New To Do</Heading>
                   <HStack>
                     <Input
-                      value={newTodo}
-                      onChange={(e) => setNewTodo(e.target.value)}
+                      value={newTodo.newTodo}
+                      onChange={(e) => setNewTodo({...newTodo, newTodo: e.target.value})}
                       placeholder="Enter a new todo"
                       flex={1}
                       color={textColor}
                     />
                     <Select
-                      value={todoNewPriority}
-                      onChange={(e) => setNewTodoPriority(e.target.value)}
+                      value={newTodo.priority}
+                      onChange={(e) => setNewTodo({...newTodo, priority: e.target.value})}
                       width="150px"
                       color={textColor}
                     >
